@@ -244,7 +244,7 @@ export const artistsData: Artist[] = [
   {
     name: "JEY KHEMEYA",
     genres: ["Techno", "House"],
-    image: "https://www.24heures.org/wp-content/uploads/2024/03/the_ackee-1-1.jpg",
+    image: "https://www.24heures.org/wp-content/uploads/2024/03/14.-Jey-Credit-Gaetan-Lack-1.jpg",
     day: "Samedi",
     year: 2024,
     description: "Avec ses rythmes puissants et ses mélodies transcendantes, ALICE & MOI transporte son public dans un voyage sonore captivant.",
