@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://24heures.org
+
+# Sitemaps
+Sitemap: https://24heures.org/sitemap.xml 
