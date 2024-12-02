@@ -21,19 +21,22 @@ export const FloatingImage = ({ artist, mousePosition }: FloatingImageProps) => 
         transform: 'translate(-50%, -50%)',
       }}
     >
-      <div className="w-60 h-60 relative rounded-lg overflow-hidden shadow-2xl animate-float">
+      <div className="w-48 h-48 relative rounded-full overflow-hidden shadow-2xl animate-float backdrop-blur-md bg-violet-500/5">
+        <div className="absolute inset-0 border border-violet-400/10 rounded-full" />
         <Image
           src={artist.image}
           alt={artist.name}
           fill
           quality={100}
-          sizes="160px"
+          sizes="192px"
           priority
-          className="object-cover"
+          className="object-cover opacity-75 hover:opacity-85 transition-opacity duration-300 mix-blend-luminosity"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/0 to-black/80" />
-        <div className="absolute bottom-0 left-0 right-0 p-3">
-          <p className="text-white text-sm font-bold text-center">{artist.name}</p>
+        <div className="absolute inset-0 bg-gradient-to-b from-violet-500/5 via-violet-500/10 to-violet-900/40 mix-blend-overlay" />
+        <div className="absolute bottom-4 left-0 right-0">
+          <p className="text-white text-sm font-bold text-center drop-shadow-lg">
+            {artist.name}
+          </p>
         </div>
       </div>
     </div>
