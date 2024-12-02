@@ -67,7 +67,7 @@ export const artistsData: Artist[] = [
   {
     name: "CONFETTI",
     genres: ["Psytrance", "Electronic"],
-    image: "https://edition-limitee.fr/images/0_2020/juin_juillet_2020/gambi-album-CD-Vinyle-edition-limitee.jpg",
+    image: "https://www.24heures.org/wp-content/uploads/2024/02/Confetti-Ringleader-Press-Pic-Xavier-Sotomayor.jpg",
     day: "Samedi",
     time: "22:30",
     year: 2024,
@@ -83,7 +83,7 @@ export const artistsData: Artist[] = [
   {
     name: "ALICE & MOI",
     genres: ["Hardcore", "Hardstyle"],
-    image: "https://edition-limitee.fr/images/0_2020/juin_juillet_2020/gambi-album-CD-Vinyle-edition-limitee.jpg",
+    image: "https://www.24heures.org/wp-content/uploads/2024/02/c-Ella-Herme-000047230004.jpg",
     day: "Dimanche",
     time: "20:30",
     year: 2024,
@@ -98,7 +98,7 @@ export const artistsData: Artist[] = [
   {
     name: "AN'OM x VAYN",
     genres: ["Hardcore", "Hardstyle"],
-    image: "https://edition-limitee.fr/images/0_2020/juin_juillet_2020/gambi-album-CD-Vinyle-edition-limitee.jpg",
+    image: "https://www.24heures.org/wp-content/uploads/2024/02/MG_4794.jpg",
     day: "Dimanche",
     time: "20:30",
     year: 2024,
@@ -113,7 +113,7 @@ export const artistsData: Artist[] = [
   {
     name: "MAGENTA CLUB",
     genres: ["Hardcore", "Hardstyle"],
-    image: "https://edition-limitee.fr/images/0_2020/juin_juillet_2020/gambi-album-CD-Vinyle-edition-limitee.jpg",
+    image: "https://www.24heures.org/wp-content/uploads/2024/03/PHOTO_PROMO_MAGENTA_BRUMEUX_P8-c-Matthieu-Rapilly1.jpg",
     day: "Dimanche",
     time: "20:30",
     year: 2024,
@@ -128,7 +128,7 @@ export const artistsData: Artist[] = [
   {
     name: "GLADDE PALLING",
     genres: ["Hardcore", "Hardstyle"],
-    image: "https://edition-limitee.fr/images/0_2020/juin_juillet_2020/gambi-album-CD-Vinyle-edition-limitee.jpg",
+    image: "https://www.24heures.org/wp-content/uploads/2024/02/MB-Gladde-Paling.png",
     day: "Dimanche",
     time: "20:30",
     year: 2024,
@@ -143,7 +143,7 @@ export const artistsData: Artist[] = [
   {
     name: "BOSSFIGHT",
     genres: ["Hardcore", "Hardstyle"],
-    image: "https://edition-limitee.fr/images/0_2020/juin_juillet_2020/gambi-album-CD-Vinyle-edition-limitee.jpg",
+    image: "https://www.24heures.org/wp-content/uploads/2024/02/333335209_1405572693596458_3336020429962021515_n1.jpg",
     day: "Dimanche",
     time: "20:30",
     year: 2024,
@@ -158,7 +158,7 @@ export const artistsData: Artist[] = [
   {
     name: "SM:LY",
     genres: ["Hardcore", "Hardstyle"],
-    image: "https://edition-limitee.fr/images/0_2020/juin_juillet_2020/gambi-album-CD-Vinyle-edition-limitee.jpg",
+    image: "https://www.24heures.org/wp-content/uploads/2024/02/img-2024-02-11-18-26-532-300x300.png",
     day: "Dimanche",
     time: "20:30",
     year: 2024,
@@ -173,7 +173,7 @@ export const artistsData: Artist[] = [
   {
     name: "ELLE RICH B2B SVBLIMINAL",
     genres: ["Hardcore", "Hardstyle"],
-    image: "https://edition-limitee.fr/images/0_2020/juin_juillet_2020/gambi-album-CD-Vinyle-edition-limitee.jpg",
+    image: "https://www.24heures.org/wp-content/uploads/2024/02/ELLE-RICH-21.jpg",
     day: "Dimanche",
     time: "20:30",
     year: 2024,
@@ -188,7 +188,7 @@ export const artistsData: Artist[] = [
   {
     name: "ATEMI B2B MB STYLE",
     genres: ["Bass House", "Dubstep"],
-    image: "https://edition-limitee.fr/images/0_2020/juin_juillet_2020/gambi-album-CD-Vinyle-edition-limitee.jpg",
+    image: "https://www.24heures.org/wp-content/uploads/2024/02/333335209_1405572693596458_3336020429962021515_n1.jpg",
     day: "Vendredi",
     year: 2024,
     description: "Avec ses rythmes puissants et ses mélodies transcendantes, ALICE & MOI transporte son public dans un voyage sonore captivant.",
@@ -202,7 +202,7 @@ export const artistsData: Artist[] = [
   {
     name: "LE FAUNE STEPPER",
     genres: ["Hardbass", "Electronic"],
-    image: "https://edition-limitee.fr/images/0_2020/juin_juillet_2020/gambi-album-CD-Vinyle-edition-limitee.jpg",
+    image: "https://www.24heures.org/wp-content/uploads/2024/03/LE-FAUNE-STEPPER_01-1.jpeg",
     day: "Samedi",
     year: 2024,
     description: "Avec ses rythmes puissants et ses mélodies transcendantes, ALICE & MOI transporte son public dans un voyage sonore captivant.",
@@ -216,7 +216,7 @@ export const artistsData: Artist[] = [
   {
     name: "AWOGA",
     genres: ["Dubstep", "Bass"],
-    image: "https://edition-limitee.fr/images/0_2020/juin_juillet_2020/gambi-album-CD-Vinyle-edition-limitee.jpg",
+    image: "https://www.24heures.org/wp-content/uploads/2024/03/AWOGA-01-1.jpg",
     day: "Dimanche",
     year: 2024,
     description: "Avec ses rythmes puissants et ses mélodies transcendantes, ALICE & MOI transporte son public dans un voyage sonore captivant.",
@@ -230,7 +230,7 @@ export const artistsData: Artist[] = [
   {
     name: "THE ACKEE",
     genres: ["Dubstep", "Bass House"],
-    image: "https://edition-limitee.fr/images/0_2020/juin_juillet_2020/gambi-album-CD-Vinyle-edition-limitee.jpg",
+    image: "https://www.24heures.org/wp-content/uploads/2024/03/the_ackee-1-1.jpg",
     day: "Vendredi",
     year: 2024,
     description: "Avec ses rythmes puissants et ses mélodies transcendantes, ALICE & MOI transporte son public dans un voyage sonore captivant.",
@@ -244,7 +244,7 @@ export const artistsData: Artist[] = [
   {
     name: "JEY KHEMEYA",
     genres: ["Techno", "House"],
-    image: "https://edition-limitee.fr/images/0_2020/juin_juillet_2020/gambi-album-CD-Vinyle-edition-limitee.jpg",
+    image: "https://www.24heures.org/wp-content/uploads/2024/03/the_ackee-1-1.jpg",
     day: "Samedi",
     year: 2024,
     description: "Avec ses rythmes puissants et ses mélodies transcendantes, ALICE & MOI transporte son public dans un voyage sonore captivant.",
@@ -258,7 +258,7 @@ export const artistsData: Artist[] = [
   {
     name: "ANTENN.E",
     genres: ["Hardstyle", "Raw"],
-    image: "https://edition-limitee.fr/images/0_2020/juin_juillet_2020/gambi-album-CD-Vinyle-edition-limitee.jpg",
+    image: "https://www.24heures.org/wp-content/uploads/2024/03/antenne2-2-1.jpg",
     day: "Dimanche",
     year: 2024,
     description: "Avec ses rythmes puissants et ses mélodies transcendantes, ALICE & MOI transporte son public dans un voyage sonore captivant.",
@@ -272,7 +272,7 @@ export const artistsData: Artist[] = [
   {
     name: "111",
     genres: ["Techno", "Hard Techno"],
-    image: "https://edition-limitee.fr/images/0_2020/juin_juillet_2020/gambi-album-CD-Vinyle-edition-limitee.jpg",
+    image: "https://www.24heures.org/wp-content/uploads/2024/03/111-coul_Nicolas-Rivoire.jpg",
     day: "Vendredi",
     year: 2024,
     description: "Avec ses rythmes puissants et ses mélodies transcendantes, ALICE & MOI transporte son public dans un voyage sonore captivant.",
@@ -286,7 +286,7 @@ export const artistsData: Artist[] = [
   {
     name: "BOPARLEUR",
     genres: ["Techno", "Industrial"],
-    image: "https://edition-limitee.fr/images/0_2020/juin_juillet_2020/gambi-album-CD-Vinyle-edition-limitee.jpg",
+    image: "https://www.24heures.org/wp-content/uploads/2024/03/WhatsApp-Image-2023-10-09-at-18.24.0311.jpeg",
     day: "Samedi",
     year: 2024,
     description: "Avec ses rythmes puissants et ses mélodies transcendantes, ALICE & MOI transporte son public dans un voyage sonore captivant.",
@@ -300,7 +300,7 @@ export const artistsData: Artist[] = [
   {
     name: "ACCESS CREW",
     genres: ["Acid", "Techno"],
-    image: "https://edition-limitee.fr/images/0_2020/juin_juillet_2020/gambi-album-CD-Vinyle-edition-limitee.jpg",
+    image: "https://www.24heures.org/wp-content/uploads/2024/03/Photo-carre-Access-Crew-HD.png",
     day: "Dimanche",
     year: 2024,
     description: "Avec ses rythmes puissants et ses mélodies transcendantes, ALICE & MOI transporte son public dans un voyage sonore captivant.",
@@ -314,7 +314,7 @@ export const artistsData: Artist[] = [
   {
     name: "DANDEE",
     genres: ["Techno", "Hard Techno"],
-    image: "https://edition-limitee.fr/images/0_2020/juin_juillet_2020/gambi-album-CD-Vinyle-edition-limitee.jpg",
+    image: "https://www.24heures.org/wp-content/uploads/2022/01/vignette_24h_45e_slogan-300x300.jpg",
     day: "Vendredi",
     year: 2024,
     description: "Avec ses rythmes puissants et ses mélodies transcendantes, ALICE & MOI transporte son public dans un voyage sonore captivant.",
@@ -328,7 +328,7 @@ export const artistsData: Artist[] = [
   {
     name: "70'ZIKETS",
     genres: ["Techno", "Electronic"],
-    image: "https://edition-limitee.fr/images/0_2020/juin_juillet_2020/gambi-album-CD-Vinyle-edition-limitee.jpg",
+    image: "https://www.24heures.org/wp-content/uploads/2022/01/vignette_24h_45e_twotrainsleft-300x300.jpg",
     day: "Samedi",
     year: 2024,
     description: "Avec ses rythmes puissants et ses mélodies transcendantes, ALICE & MOI transporte son public dans un voyage sonore captivant.",
@@ -342,7 +342,7 @@ export const artistsData: Artist[] = [
   {
     name: "LA BANDASS",
     genres: ["Techno", "Hard Techno"],
-    image: "https://edition-limitee.fr/images/0_2020/juin_juillet_2020/gambi-album-CD-Vinyle-edition-limitee.jpg",
+    image: "https://www.24heures.org/wp-content/uploads/2024/03/vignette_24h_47e_labandas-1.png",
     day: "Dimanche",
     year: 2024,
     description: "Avec ses rythmes puissants et ses mélodies transcendantes, ALICE & MOI transporte son public dans un voyage sonore captivant.",
@@ -356,7 +356,7 @@ export const artistsData: Artist[] = [
   {
     name: "KLS",
     genres: ["Techno", "Hard Techno"],
-    image: "https://edition-limitee.fr/images/0_2020/juin_juillet_2020/gambi-album-CD-Vinyle-edition-limitee.jpg",
+    image: "https://www.24heures.org/wp-content/uploads/2024/03/vignette_24h_48e_kls-1.jpg",
     day: "Vendredi",
     year: 2024,
     description: "Avec ses rythmes puissants et ses mélodies transcendantes, ALICE & MOI transporte son public dans un voyage sonore captivant.",
