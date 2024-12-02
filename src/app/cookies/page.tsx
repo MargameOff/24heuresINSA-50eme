@@ -33,7 +33,7 @@ export default function CookiesPage() {
           <h1 className="text-4xl font-bold mb-8 text-violet-400">Politique des Cookies</h1>
           
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4 text-violet-300">Qu'est-ce qu'un cookie ?</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-violet-300">Qu'est-ce qu&#39;un cookie ?</h2>
             <p className="text-gray-300 leading-relaxed mb-4">
               Un cookie est un petit fichier texte stocké sur votre ordinateur ou appareil mobile lorsque vous visitez un site web. 
               Les cookies sont largement utilisés pour faire fonctionner les sites web ou les rendre plus efficaces, 
