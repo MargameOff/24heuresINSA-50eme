@@ -10,6 +10,8 @@ const dayColors = {
   'Dimanche': 'bg-rose-500/70'
 } as const
 
+type Day = keyof typeof dayColors
+
 interface ArtistCardProps {
   artist: Artist;
   isHovered: boolean;
@@ -20,6 +22,10 @@ const getArtistSlug = (name: string) => {
 };
 
 export const ArtistCard = ({ artist, isHovered }: ArtistCardProps) => {
+  const dayColor = artist.day && (artist.day as Day) in dayColors 
+    ? dayColors[artist.day as Day]
+    : 'bg-gray-500/70' // Couleur par défaut si le jour n'est pas défini ou invalide
+
   return (
     <Link 
       href={`/artistes/${getArtistSlug(artist.name)}`}
@@ -34,9 +40,11 @@ export const ArtistCard = ({ artist, isHovered }: ArtistCardProps) => {
         className="object-cover"
       />
       {/* Label du jour */}
-      <div className={`absolute top-4 left-4 ${dayColors[artist.day]} px-4 py-1 rounded-full backdrop-blur-sm text-white font-medium z-10`}>
-        {artist.day}
-      </div>
+      {artist.day && (
+        <div className={`absolute top-4 left-4 ${dayColor} px-4 py-1 rounded-full backdrop-blur-sm text-white font-medium z-10`}>
+          {artist.day}
+        </div>
+      )}
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent">
         <div className="absolute bottom-0 left-0 right-0 p-6">
           <h3 className="text-2xl font-bold text-white mb-3">{artist.name}</h3>
