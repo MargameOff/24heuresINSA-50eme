@@ -2,6 +2,7 @@
 
 import { ArtistCarousel } from '@/components/shared/ArtistCarousel'
 import { Particles } from '@/components/shared/Particles'
+import Link from 'next/link'
 
 export const ProgrammationSection = () => {
   return (
@@ -16,9 +17,12 @@ export const ProgrammationSection = () => {
         </div>
 
         <div className="text-center mt-10 animate-fade-in-up animation-delay-500 px-6 md:px-4">
-          <button className="text-xl font-bold border border-violet-500/50 text-violet-400 hover:text-white hover:border-violet-400 px-8 py-3 rounded-full transition-all duration-300 hover:scale-105 backdrop-blur-sm bg-violet-500/5">
+          <Link 
+            href="/programmation"
+            className="inline-block text-xl font-bold border border-violet-500/50 text-violet-400 hover:text-white hover:border-violet-400 px-8 py-3 rounded-full transition-all duration-300 hover:scale-105 backdrop-blur-sm bg-violet-500/5"
+          >
             LINE UP COMPLÈTE
-          </button>
+          </Link>
         </div>
 
         <div className="absolute inset-0 pointer-events-none">

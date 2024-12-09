@@ -2,12 +2,12 @@
 
 import { Particles } from '@/components/shared/Particles'
 import { FloatingImage } from '@/components/shared/FloatingImage'
-import { artistsData } from '@/data/artists'
 import { useState, useEffect } from 'react'
-import { Artist } from '@/types/types'
 import Link from 'next/link'
+import { getArtistes } from '@/lib/strapi'
+import type { Artiste } from '@/types/strapi'
 
-const groupArtists = (artists: typeof artistsData, isMobile: boolean = false) => {
+const groupArtists = (artists: Artiste[], isMobile: boolean = false) => {
   const totalArtists = artists.length;
   const visibleArtists = isMobile ? artists.slice(0, Math.ceil(totalArtists / 2)) : artists;
   
@@ -19,13 +19,31 @@ const groupArtists = (artists: typeof artistsData, isMobile: boolean = false) =>
   return { headliners, mainActs, supportActs };
 };
 
-const getArtistSlug = (name: string) => {
-  return name.toLowerCase().replace(/\s+/g, '-');
+const getArtistSlug = (nom: string) => {
+  return nom.toLowerCase().replace(/\s+/g, '-');
 };
 
 export const LineUpSection = () => {
-  const [hoveredArtist, setHoveredArtist] = useState<Artist | null>(null)
+  const [hoveredArtist, setHoveredArtist] = useState<Artiste | null>(null)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [artists, setArtists] = useState<Artiste[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchArtists = async () => {
+      try {
+        const response = await getArtistes();
+        setArtists(response.data);
+        setIsLoading(false);
+      } catch (err) {
+        setError('Erreur lors du chargement des artistes');
+        setIsLoading(false);
+      }
+    };
+
+    fetchArtists();
+  }, []);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -39,13 +57,33 @@ export const LineUpSection = () => {
     }
   }, [])
 
-  const desktopGroups = groupArtists(artistsData, false);
-  const mobileGroups = groupArtists(artistsData, true);
+  if (isLoading) {
+    return (
+      <section className="lineup-section min-h-screen bg-gray-900 relative overflow-hidden py-20 md:py-20">
+        <div className="container mx-auto px-4 flex items-center justify-center">
+          <div className="text-white text-2xl">Chargement des artistes...</div>
+        </div>
+      </section>
+    );
+  }
 
-  const renderArtistGroup = (artists: typeof artistsData, textSizeClass: string, colorClass: string = 'text-white', isMobile: boolean = false) => {
+  if (error) {
+    return (
+      <section className="lineup-section min-h-screen bg-gray-900 relative overflow-hidden py-20 md:py-20">
+        <div className="container mx-auto px-4 flex items-center justify-center">
+          <div className="text-red-500 text-2xl">{error}</div>
+        </div>
+      </section>
+    );
+  }
+
+  const desktopGroups = groupArtists(artists, false);
+  const mobileGroups = groupArtists(artists, true);
+
+  const renderArtistGroup = (artists: Artiste[], textSizeClass: string, colorClass: string = 'text-white', isMobile: boolean = false) => {
     return artists.map((artist, index) => (
       <div 
-        key={artist.name} 
+        key={artist.id} 
         className={`relative opacity-0 ${isMobile ? 'w-full text-center' : ''}`}
         style={{ 
           animation: `fade-in-artist 0.5s ease-out forwards`,
@@ -53,12 +91,12 @@ export const LineUpSection = () => {
         }}
       >
         <Link 
-          href={`/artistes/${getArtistSlug(artist.name)}`}
+          href={`/artistes/${getArtistSlug(artist.nom)}`}
           className={`${textSizeClass} ${colorClass} hover:text-violet-300 transition-all duration-300 cursor-pointer font-bold leading-tight inline-block`}
           onMouseEnter={() => setHoveredArtist(artist)}
           onMouseLeave={() => setHoveredArtist(null)}
         >
-          {artist.name}
+          {artist.nom}
         </Link>
         {index < artists.length - 1 && !isMobile && (
           <span className="text-gray-600 mx-2">/</span>
@@ -118,9 +156,12 @@ export const LineUpSection = () => {
 
         {/* Bouton Programmation */}
         <div className="text-center animate-fade-in-up animation-delay-700 mt-6 md:mt-12">
-          <button className="w-full md:w-auto text-base md:text-xl font-bold border border-violet-500/50 text-violet-400 hover:text-white hover:border-violet-400 px-6 md:px-8 py-2 md:py-3 rounded-full transition-all duration-300 hover:scale-105 backdrop-blur-sm bg-violet-500/5">
+          <Link 
+            href="/programmation"
+            className="inline-block w-full md:w-auto text-base md:text-xl font-bold border border-violet-500/50 text-violet-400 hover:text-white hover:border-violet-400 px-6 md:px-8 py-2 md:py-3 rounded-full transition-all duration-300 hover:scale-105 backdrop-blur-sm bg-violet-500/5"
+          >
             PROGRAMMATION COMPLÈTE
-          </button>
+          </Link>
         </div>
       </div>
 
