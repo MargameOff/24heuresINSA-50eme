@@ -1,13 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { PageWrapper } from '@/components/layout/PageWrapper'
 import { Particles } from '@/components/shared/Particles'
 import { ArtistListCard } from '@/components/shared/ArtistListCard'
-import { artistsData } from '@/data/artists'
+import type { Artiste } from '@/types/strapi'
 
 const FILTERS = {
   dates: [
@@ -100,16 +100,41 @@ export default function ArtistesPage() {
   const [selectedDate, setSelectedDate] = useState('all')
   const [selectedScene, setSelectedScene] = useState('all')
   const [selectedYear, setSelectedYear] = useState('all')
+  const [artists, setArtists] = useState<Artiste[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
-  const filteredArtists = artistsData.filter(artist => {
-    if (selectedDate !== 'all' && artist.day?.toLowerCase() !== selectedDate) {
+  useEffect(() => {
+    const fetchArtists = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/artistes?populate=*`)
+        const data = await response.json()
+        setArtists(data.data.map((item: any) => ({
+          ...item.attributes,
+          id: item.id
+        })))
+      } catch (error) {
+        console.error('Error fetching artists:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchArtists()
+  }, [])
+
+  const filteredArtists = artists.filter(artist => {
+    if (selectedDate !== 'all' && artist.passage?.jour?.toLowerCase() !== selectedDate) {
       return false
     }
-    if (selectedScene !== 'all' && artist.stage?.toLowerCase() !== selectedScene) {
+    if (selectedScene !== 'all' && artist.passage?.scene?.toLowerCase() !== selectedScene) {
       return false
     }
-    if (selectedYear !== 'all' && artist.year?.toString() !== selectedYear) {
-      return false
+    if (selectedYear !== 'all') {
+      if (!artist.dateDePublication) return false;
+      const artistYear = new Date(artist.dateDePublication).getFullYear().toString()
+      if (artistYear !== selectedYear) {
+        return false
+      }
     }
     return true
   })
@@ -170,22 +195,28 @@ export default function ArtistesPage() {
         <section>
           <div className="container mx-auto px-4">
             <AnimatePresence mode="wait">
-              <motion.div
-                key={`${selectedYear}-${selectedDate}-${selectedScene}`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
-              >
-                {filteredArtists.map((artist, index) => (
-                  <ArtistListCard 
-                    key={artist.name}
-                    artist={artist}
-                    index={index}
-                  />
-                ))}
-              </motion.div>
+              {isLoading ? (
+                <div className="flex justify-center items-center min-h-[200px]">
+                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-violet-500"></div>
+                </div>
+              ) : (
+                <motion.div
+                  key={`${selectedYear}-${selectedDate}-${selectedScene}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+                >
+                  {filteredArtists.map((artist, index) => (
+                    <ArtistListCard 
+                      key={artist.id}
+                      artist={artist}
+                      index={index}
+                    />
+                  ))}
+                </motion.div>
+              )}
             </AnimatePresence>
           </div>
         </section>
