@@ -28,8 +28,16 @@ export interface ReseauxSociaux {
   spotify: string | null;
 }
 
+export interface Scene {
+  id: number;
+  nom: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
 export interface Passage {
-  scene: string;
+  scene: Scene | null;
   jour: string;
   horaire: string;
   duree: number;
@@ -44,6 +52,7 @@ export interface Artiste {
   id: number;
   nom: string;
   description: string;
+  rank: number;
   videoYoutube: string | null;
   dateDePublication: string | null;
   createdAt: string;
@@ -52,6 +61,15 @@ export interface Artiste {
   image: Image;
   passage: Passage | null;
   reseauxSociaux: ReseauxSociaux | null;
+}
+
+export interface Edition {
+  id: number;
+  nom: string;
+  annee: number;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
 }
 
 export interface StrapiResponse<T> {

@@ -43,6 +43,14 @@ export const ArtistCarousel = () => {
     );
   }
 
+  if (artists.length === 0) {
+    return (
+      <div className="flex justify-center items-center py-12">
+        <div className="text-white text-xl">Aucun artiste disponible pour le moment</div>
+      </div>
+    );
+  }
+
   // Multiplier le tableau d'artistes pour créer un effet infini
   // Si nous avons peu d'artistes, nous multiplions plus de fois
   const multiplier = Math.max(10, Math.ceil(20 / artists.length));

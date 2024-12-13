@@ -1,7 +1,9 @@
 import type { 
   FetchConfig, 
   StrapiResponse, 
-  Artiste 
+  Artiste, 
+  Edition, 
+  Scene 
 } from '@/types/strapi';
 
 export async function fetchAPI<T>({ url, ...config }: FetchConfig): Promise<T> {
@@ -33,14 +35,17 @@ export async function fetchAPI<T>({ url, ...config }: FetchConfig): Promise<T> {
 // Récupérer tous les artistes
 export async function getArtistes() {
   return fetchAPI<StrapiResponse<Artiste>>({
-    url: '/artistes?populate=*',
+    url: '/artistes?populate[0]=image&populate[1]=passage&populate[2]=passage.edition&populate[3]=passage.scene&populate[4]=reseauxSociaux&sort[0]=rank:asc',
     method: 'GET',
   });
 }
 
 // Récupérer uniquement les artistes publiés avec une date de publication
 export async function getArtistesPublies() {
-  const response = await getArtistes();
+  const response = await fetchAPI<StrapiResponse<Artiste>>({
+    url: '/artistes?populate[0]=image&populate[1]=passage&populate[2]=passage.edition&populate[3]=passage.scene&populate[4]=reseauxSociaux&sort[0]=rank:asc&filters[publishedAt][$notNull]=true',
+    method: 'GET',
+  });
   const now = new Date();
 
   return {
@@ -48,15 +53,14 @@ export async function getArtistesPublies() {
       if (!artiste.dateDePublication) return false;
       const datePublication = new Date(artiste.dateDePublication);
       return datePublication <= now;
-    }),
-    meta: response.meta
+    })
   };
 }
 
 // Récupérer un artiste par son ID
 export async function getArtisteById(id: string) {
   return fetchAPI<{ data: Artiste }>({
-    url: `/artistes/${id}?populate=*`,
+    url: `/artistes/${id}?populate[0]=image&populate[1]=passage&populate[2]=passage.edition&populate[3]=passage.scene&populate[4]=reseauxSociaux`,
     method: 'GET',
   });
 }
@@ -71,8 +75,16 @@ export async function getGenresMusicaux() {
 
 // Récupérer les éditions
 export async function getEditions() {
-  return fetchAPI<any>({
-    url: '/editions',
+  return fetchAPI<StrapiResponse<Edition>>({
+    url: '/editions?sort[0]=annee:desc',
+    method: 'GET',
+  });
+}
+
+// Récupérer les scènes
+export async function getScenes() {
+  return fetchAPI<StrapiResponse<Scene>>({
+    url: '/scenes?sort[0]=nom:asc',
     method: 'GET',
   });
 } 

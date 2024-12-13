@@ -12,7 +12,7 @@ interface ArtistListCardProps {
 
 export const ArtistListCard = ({ artist, index }: ArtistListCardProps) => {
   console.log('Artist image data:', artist.image);
-  const hasTopInfo = artist.passage?.jour || artist.passage?.scene
+  const hasTopInfo = artist.passage?.jour || artist.passage?.scene?.nom
   const imageUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL + 
     (artist.image?.formats?.medium?.url || 
      artist.image?.formats?.small?.url || 
@@ -55,7 +55,7 @@ export const ArtistListCard = ({ artist, index }: ArtistListCardProps) => {
                   <span>{artist.passage.jour}</span>
                 </motion.div>
               )}
-              {artist.passage?.scene && (
+              {artist.passage?.scene?.nom && (
                 <motion.div
                   initial={{ opacity: 1 }}
                   whileHover={{ scale: 1.05 }}
@@ -64,7 +64,7 @@ export const ArtistListCard = ({ artist, index }: ArtistListCardProps) => {
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
                   </svg>
-                  <span>{artist.passage.scene}</span>
+                  <span>{artist.passage.scene.nom}</span>
                 </motion.div>
               )}
             </div>

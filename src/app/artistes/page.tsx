@@ -7,7 +7,8 @@ import { Footer } from '@/components/layout/Footer'
 import { PageWrapper } from '@/components/layout/PageWrapper'
 import { Particles } from '@/components/shared/Particles'
 import { ArtistListCard } from '@/components/shared/ArtistListCard'
-import type { Artiste } from '@/types/strapi'
+import { getArtistesPublies, getEditions, getScenes } from '@/lib/strapi'
+import type { Artiste, Edition, Scene } from '@/types/strapi'
 
 const FILTERS = {
   dates: [
@@ -15,18 +16,6 @@ const FILTERS = {
     { id: 'vendredi', label: 'VENDREDI' },
     { id: 'samedi', label: 'SAMEDI' },
     { id: 'dimanche', label: 'DIMANCHE' }
-  ],
-  scenes: [
-    { id: 'all', label: 'TOUTES' },
-    { id: 'main', label: 'SCÈNE PRINCIPALE' },
-    { id: 'secondaire', label: 'SCÈNE SECONDAIRE' },
-    { id: 'chapiteau', label: 'CHAPITEAU' }
-  ],
-  years: [
-    { id: 'all', label: 'TOUTES' },
-    { id: '2024', label: '2024' },
-    { id: '2023', label: '2023' },
-    { id: '2022', label: '2022' }
   ]
 }
 
@@ -101,43 +90,87 @@ export default function ArtistesPage() {
   const [selectedScene, setSelectedScene] = useState('all')
   const [selectedYear, setSelectedYear] = useState('all')
   const [artists, setArtists] = useState<Artiste[]>([])
+  const [editions, setEditions] = useState<Edition[]>([])
+  const [scenes, setScenes] = useState<Scene[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const fetchArtists = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/artistes?populate=*`)
-        const data = await response.json()
-        setArtists(data.data.map((item: any) => ({
-          ...item.attributes,
-          id: item.id
-        })))
+        const [artistsResponse, editionsResponse, scenesResponse] = await Promise.all([
+          getArtistesPublies(),
+          getEditions(),
+          getScenes()
+        ]);
+
+        if (artistsResponse.data) {
+          setArtists(artistsResponse.data)
+        } else {
+          setError("Aucun artiste trouvé")
+        }
+
+        if (editionsResponse.data) {
+          setEditions(editionsResponse.data)
+        }
+
+        if (scenesResponse.data) {
+          setScenes(scenesResponse.data)
+        }
       } catch (error) {
-        console.error('Error fetching artists:', error)
+        console.error('Error fetching data:', error)
+        setError("Erreur lors du chargement des données")
       } finally {
         setIsLoading(false)
       }
     }
 
-    fetchArtists()
+    fetchData()
   }, [])
 
+  // Créer le tableau des années à partir des éditions
+  const yearOptions = [
+    { id: 'all', label: 'TOUTES' },
+    ...editions.map(edition => ({
+      id: edition.annee.toString(),
+      label: edition.annee.toString()
+    }))
+  ]
+
+  // Créer le tableau des scènes à partir des scènes
+  const sceneOptions = [
+    { id: 'all', label: 'TOUTES' },
+    ...scenes.map(scene => ({
+      id: scene.nom.toLowerCase(),
+      label: scene.nom
+    }))
+  ]
+
   const filteredArtists = artists.filter(artist => {
-    if (selectedDate !== 'all' && artist.passage?.jour?.toLowerCase() !== selectedDate) {
-      return false
-    }
-    if (selectedScene !== 'all' && artist.passage?.scene?.toLowerCase() !== selectedScene) {
-      return false
-    }
-    if (selectedYear !== 'all') {
-      if (!artist.dateDePublication) return false;
-      const artistYear = new Date(artist.dateDePublication).getFullYear().toString()
-      if (artistYear !== selectedYear) {
-        return false
+    // Vérification de la date
+    if (selectedDate !== 'all') {
+      if (!artist.passage?.jour?.toLowerCase() || artist.passage.jour.toLowerCase() !== selectedDate) {
+        return false;
       }
     }
-    return true
-  })
+
+    // Vérification de la scène
+    if (selectedScene !== 'all') {
+      if (!artist.passage?.scene?.nom || artist.passage.scene.nom.toLowerCase() !== selectedScene) {
+        return false;
+      }
+    }
+
+    // Vérification de l'année
+    if (selectedYear !== 'all') {
+      if (!artist.passage?.edition?.annee || artist.passage.edition.annee.toString() !== selectedYear) {
+        return false;
+      }
+    }
+
+    // Si toutes les conditions sont passées
+    return true;
+  });
 
   return (
     <PageWrapper>
@@ -171,7 +204,7 @@ export default function ArtistesPage() {
             <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
               <Dropdown
                 label="ANNÉES"
-                options={FILTERS.years}
+                options={yearOptions}
                 value={selectedYear}
                 onChange={setSelectedYear}
               />
@@ -183,7 +216,7 @@ export default function ArtistesPage() {
               />
               <Dropdown
                 label="SCÈNES"
-                options={FILTERS.scenes}
+                options={sceneOptions}
                 value={selectedScene}
                 onChange={setSelectedScene}
               />
@@ -198,6 +231,14 @@ export default function ArtistesPage() {
               {isLoading ? (
                 <div className="flex justify-center items-center min-h-[200px]">
                   <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-violet-500"></div>
+                </div>
+              ) : error ? (
+                <div className="text-center text-violet-300">
+                  {error}
+                </div>
+              ) : filteredArtists.length === 0 ? (
+                <div className="text-center text-violet-300">
+                  Aucun artiste ne correspond aux filtres sélectionnés
                 </div>
               ) : (
                 <motion.div
