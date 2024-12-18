@@ -18,6 +18,20 @@ interface StrapiMaintenance {
   publishedAt: string
 }
 
+interface StrapiRedirection {
+  id: number
+  documentId: string
+  createdAt: string
+  updatedAt: string
+  publishedAt: string
+  sourcePath: string
+  type: 'external_url' | 'file'
+  externalUrl: string | null
+  description: string | null
+  active: boolean
+  file: any | null
+}
+
 interface StrapiError {
   status: number
   name: string
@@ -36,6 +50,44 @@ interface StrapiResponse<T> {
     }
   }
   error?: StrapiError
+}
+
+// Fonction pour récupérer les redirections depuis Strapi
+export async function fetchRedirections(apiUrl: string): Promise<ExternalRoute[]> {
+  console.log('Fetching redirections from Strapi:', apiUrl)
+  try {
+    const token = process.env.NEXT_PUBLIC_STRAPI_TOKEN
+    console.log('Using token:', token ? 'Token exists' : 'No token')
+    
+    const response = await fetch(`${apiUrl}/api/redirections`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    })
+    
+    console.log('Strapi response status:', response.status)
+    const data: StrapiResponse<StrapiRedirection[]> = await response.json()
+    console.log('Strapi response data:', JSON.stringify(data, null, 2))
+    
+    if (data.error || !data.data) {
+      console.log('Error or no data in response:', data.error)
+      return []
+    }
+    
+    // Convertir les redirections Strapi en ExternalRoute
+    const routes = data.data
+      .filter(redirection => redirection.active && redirection.type === 'external_url' && redirection.externalUrl)
+      .map(redirection => ({
+        path: `/${redirection.sourcePath}`.replace(/\/+/g, '/'),
+        url: redirection.externalUrl!
+      }))
+    
+    console.log('Converted routes:', routes)
+    return routes
+  } catch (error) {
+    console.error('Error fetching redirections:', error)
+    return []
+  }
 }
 
 export const socialRoutes: ExternalRoute[] = [
@@ -69,9 +121,38 @@ export const allExternalRoutes: ExternalRoute[] = [
 ]
 
 // Fonction utilitaire pour trouver une redirection
-export function findRedirect(path: string): string | null {
-  const route = allExternalRoutes.find(route => route.path === path)
-  return route ? route.url : null
+export async function findRedirect(path: string, apiUrl?: string): Promise<string | null> {
+  console.log('Finding redirect for path:', path)
+  console.log('API URL:', apiUrl)
+  
+  // D'abord, chercher dans les routes statiques
+  console.log('Checking static routes:', allExternalRoutes.map(r => r.path))
+  const staticRoute = allExternalRoutes.find(route => {
+    console.log('Comparing paths:', { routePath: route.path, currentPath: path, match: route.path === path })
+    return route.path === path
+  })
+  if (staticRoute) {
+    console.log('Found static route:', staticRoute)
+    return staticRoute.url
+  }
+
+  // Si une URL d'API est fournie, chercher dans les redirections dynamiques
+  if (apiUrl) {
+    console.log('Searching in dynamic routes')
+    const dynamicRoutes = await fetchRedirections(apiUrl)
+    console.log('Found dynamic routes:', dynamicRoutes.map(r => r.path))
+    const dynamicRoute = dynamicRoutes.find(route => {
+      console.log('Comparing dynamic paths:', { routePath: route.path, currentPath: path, match: route.path === path })
+      return route.path === path
+    })
+    if (dynamicRoute) {
+      console.log('Found dynamic route:', dynamicRoute)
+      return dynamicRoute.url
+    }
+  }
+
+  console.log('No redirect found')
+  return null
 }
 
 // Fonction pour récupérer l'état de maintenance depuis Strapi

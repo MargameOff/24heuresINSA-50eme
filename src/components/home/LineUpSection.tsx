@@ -4,8 +4,9 @@ import { Particles } from '@/components/shared/Particles'
 import { FloatingImage } from '@/components/shared/FloatingImage'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { getArtistes } from '@/lib/strapi'
+import { getArtistes, getEditions } from '@/lib/strapi'
 import type { Artiste } from '@/types/strapi'
+import { motion } from 'framer-motion'
 
 const groupArtists = (artists: Artiste[], isMobile: boolean = false) => {
   const totalArtists = artists.length;
@@ -33,9 +34,28 @@ export const LineUpSection = () => {
   useEffect(() => {
     const fetchArtists = async () => {
       try {
-        const response = await getArtistes();
-        setArtists(response.data);
-        setIsLoading(false);
+        const [artistsResponse, editionsResponse] = await Promise.all([
+          getArtistes(),
+          getEditions()
+        ]);
+
+        if (artistsResponse.data && editionsResponse.data) {
+          // Trouver l'année la plus récente
+          const mostRecentEdition = editionsResponse.data.reduce((latest, current) => 
+            latest.annee > current.annee ? latest : current
+          );
+
+          // Filtrer les artistes pour ne garder que ceux de l'année la plus récente
+          const currentYearArtists = artistsResponse.data.filter(artist => 
+            artist.passage?.edition?.annee === mostRecentEdition.annee
+          );
+          
+          setArtists(currentYearArtists);
+          setIsLoading(false);
+        } else {
+          setArtists([]);
+          setIsLoading(false);
+        }
       } catch (err) {
         setError('Erreur lors du chargement des artistes');
         setIsLoading(false);
@@ -73,6 +93,53 @@ export const LineUpSection = () => {
         <div className="container mx-auto px-4 flex items-center justify-center">
           <div className="text-red-500 text-2xl">{error}</div>
         </div>
+      </section>
+    );
+  }
+
+  // Si aucun artiste n'est disponible, afficher le message d'attente
+  if (artists.length === 0) {
+    return (
+      <section className="lineup-section min-h-screen bg-gray-900 relative overflow-hidden py-20 md:py-20">
+        <div className="container mx-auto px-4 md:px-6 relative h-screen md:h-auto flex flex-col md:block">
+          <h2 className="text-4xl sm:text-5xl md:text-8xl font-bold text-center mb-8 md:mb-20 bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-white font-sans relative z-10 animate-scale-in">
+            Line Up
+            <span className="block text-lg sm:text-xl md:text-3xl mt-2 text-violet-400/80 font-bold animate-fade-in-up animation-delay-300">2024</span>
+          </h2>
+
+          <div className="flex flex-col items-center justify-center space-y-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-center"
+            >
+              <p className="text-2xl md:text-3xl text-violet-200 font-bold mb-4">
+                Programmation à venir
+              </p>
+              <p className="text-lg md:text-xl text-violet-300/80">
+                La programmation de la prochaine édition sera dévoilée prochainement.
+                <br />
+                Restez connectés !
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="relative"
+            >
+              <div className="absolute inset-0 bg-violet-500/20 blur-xl"></div>
+              <div className="relative px-8 py-4 bg-violet-500/10 backdrop-blur-sm rounded-2xl border border-violet-400/30">
+                <div className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-violet-200 to-white bg-clip-text text-transparent">
+                  2024
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+        <Particles isVisible={true} />
       </section>
     );
   }

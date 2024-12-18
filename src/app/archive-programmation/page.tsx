@@ -20,9 +20,10 @@ const FILTERS = {
   ]
 }
 
-export default function ArtistesPage() {
+export default function ArchiveProgrammationPage() {
   const [selectedDate, setSelectedDate] = useState('all')
   const [selectedScene, setSelectedScene] = useState('all')
+  const [selectedYear, setSelectedYear] = useState('all')
   const [artists, setArtists] = useState<Artiste[]>([])
   const [editions, setEditions] = useState<Edition[]>([])
   const [scenes, setScenes] = useState<Scene[]>([])
@@ -38,21 +39,14 @@ export default function ArtistesPage() {
           getScenes()
         ]);
 
-        if (artistsResponse.data && editionsResponse.data) {
-          // Trouver l'année la plus récente
-          const mostRecentEdition = editionsResponse.data.reduce((latest, current) => 
-            latest.annee > current.annee ? latest : current
-          );
-
-          // Filtrer les artistes pour ne garder que ceux de l'année la plus récente
-          const currentYearArtists = artistsResponse.data.filter(artist => 
-            artist.passage?.edition?.annee === mostRecentEdition.annee
-          );
-          
-          setArtists(currentYearArtists)
-          setEditions(editionsResponse.data)
+        if (artistsResponse.data) {
+          setArtists(artistsResponse.data)
         } else {
           setError("Aucun artiste trouvé")
+        }
+
+        if (editionsResponse.data) {
+          setEditions(editionsResponse.data)
         }
 
         if (scenesResponse.data) {
@@ -68,6 +62,15 @@ export default function ArtistesPage() {
 
     fetchData()
   }, [])
+
+  // Créer le tableau des années à partir des éditions
+  const yearOptions = [
+    { id: 'all', label: 'TOUTES' },
+    ...editions.map(edition => ({
+      id: edition.annee.toString(),
+      label: edition.annee.toString()
+    }))
+  ]
 
   // Créer le tableau des scènes à partir des scènes
   const sceneOptions = [
@@ -93,6 +96,14 @@ export default function ArtistesPage() {
       }
     }
 
+    // Vérification de l'année
+    if (selectedYear !== 'all') {
+      if (!artist.passage?.edition?.annee || artist.passage.edition.annee.toString() !== selectedYear) {
+        return false;
+      }
+    }
+
+    // Si toutes les conditions sont passées
     return true;
   });
 
@@ -120,11 +131,11 @@ export default function ArtistesPage() {
               className="text-center max-w-3xl mx-auto"
             >
               <h1 className="text-4xl md:text-5xl font-bold text-violet-400 mb-4">
-                Découvrir la programmation
+                Archives des éditions
               </h1>
               <p className="text-violet-100/80 text-lg mb-6">
-                Plongez dans l'univers musical des 24 heures de l'INSA ! Des artistes talentueux, 
-                des styles variés, une expérience unique à ne pas manquer.
+                Revivez les moments forts des éditions précédentes des 24 heures de l'INSA. 
+                Explorez la riche histoire musicale de notre festival à travers les années.
               </p>
             </motion.div>
           </div>
@@ -134,6 +145,12 @@ export default function ArtistesPage() {
         <section className="mb-8">
           <div className="container mx-auto px-4">
             <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
+              <Dropdown
+                label="ANNÉES"
+                options={yearOptions}
+                value={selectedYear}
+                onChange={setSelectedYear}
+              />
               <Dropdown
                 label="DATES"
                 options={FILTERS.dates}
@@ -168,7 +185,7 @@ export default function ArtistesPage() {
                 </div>
               ) : (
                 <motion.div
-                  key={`${selectedDate}-${selectedScene}`}
+                  key={`${selectedYear}-${selectedDate}-${selectedScene}`}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
@@ -185,32 +202,6 @@ export default function ArtistesPage() {
                 </motion.div>
               )}
             </AnimatePresence>
-          </div>
-        </section>
-
-        {/* Bouton Archives */}
-        <section className="mt-16">
-          <div className="container mx-auto px-4">
-            <div className="flex justify-center">
-              <motion.a
-                href="/archive-programmation"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="group relative inline-flex items-center gap-2 bg-violet-500/10 hover:bg-violet-500/20 border border-violet-500/20 backdrop-blur-sm rounded-full px-6 py-3 text-violet-200 transition-all duration-200"
-              >
-                <span className="text-lg">Découvrir les archives</span>
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  className="h-5 w-5 transform transition-transform duration-200 group-hover:translate-x-1" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </motion.a>
-            </div>
           </div>
         </section>
       </main>

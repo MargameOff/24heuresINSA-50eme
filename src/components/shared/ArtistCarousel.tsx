@@ -1,47 +1,16 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { ArtistListCard } from '@/components/shared/ArtistListCard'
-import { getArtistesPublies } from '@/lib/strapi'
 import type { Artiste } from '@/types/strapi'
 
-export const ArtistCarousel = () => {
+interface ArtistCarouselProps {
+  artists: Artiste[]
+}
+
+export const ArtistCarousel = ({ artists }: ArtistCarouselProps) => {
   const [direction, setDirection] = useState<'left' | 'right'>('left')
   const [isPaused, setIsPaused] = useState(false)
-  const [artists, setArtists] = useState<Artiste[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    const fetchArtists = async () => {
-      try {
-        const response = await getArtistesPublies();
-        setArtists(response.data);
-        setIsLoading(false);
-      } catch (err) {
-        setError('Erreur lors du chargement des artistes');
-        setIsLoading(false);
-      }
-    };
-
-    fetchArtists();
-  }, []);
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center py-12">
-        <div className="text-white text-xl">Chargement des artistes...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex justify-center items-center py-12">
-        <div className="text-red-500 text-xl">{error}</div>
-      </div>
-    );
-  }
 
   if (artists.length === 0) {
     return (
