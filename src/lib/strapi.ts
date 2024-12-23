@@ -8,16 +8,13 @@ import type {
 
 export async function fetchAPI<T>({ url, ...config }: FetchConfig): Promise<T> {
   const apiURL = process.env.NEXT_PUBLIC_STRAPI_API_URL;
-  const token = process.env.NEXT_PUBLIC_STRAPI_TOKEN;
 
   if (!apiURL) throw new Error('NEXT_PUBLIC_STRAPI_API_URL is not defined');
-  if (!token) throw new Error('NEXT_PUBLIC_STRAPI_TOKEN is not defined');
 
   const mergedConfig = {
     ...config,
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
       ...config.headers,
     },
   };
