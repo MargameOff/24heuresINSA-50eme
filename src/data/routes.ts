@@ -56,14 +56,7 @@ interface StrapiResponse<T> {
 export async function fetchRedirections(apiUrl: string): Promise<ExternalRoute[]> {
   console.log('Fetching redirections from Strapi:', apiUrl)
   try {
-    const token = process.env.NEXT_PUBLIC_STRAPI_TOKEN
-    console.log('Using token:', token ? 'Token exists' : 'No token')
-    
-    const response = await fetch(`${apiUrl}/api/redirections`, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      }
-    })
+    const response = await fetch(`${apiUrl}/api/redirections`)
     
     console.log('Strapi response status:', response.status)
     const data: StrapiResponse<StrapiRedirection[]> = await response.json()
@@ -158,13 +151,7 @@ export async function findRedirect(path: string, apiUrl?: string): Promise<strin
 // Fonction pour récupérer l'état de maintenance depuis Strapi
 export async function fetchMaintenanceMode(apiUrl: string): Promise<boolean> {
   try {
-    const token = process.env.NEXT_PUBLIC_STRAPI_TOKEN
-    const response = await fetch(`${apiUrl}/api/maintenance`, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      }
-    })
-    
+    const response = await fetch(`${apiUrl}/api/maintenance`)
     const data: StrapiResponse<StrapiMaintenance> = await response.json()
     
     if (data.error) {
